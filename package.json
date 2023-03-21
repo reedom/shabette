@@ -1,11 +1,11 @@
 {
-  "name": "Google Text-to-Speech Chrome Extension",
+  "name": "shabette",
   "version": "0.1.0",
   "description": "Text-to-Speech service",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reedom/gttsce.git"
+    "url": "https://github.com/reedom/shabette.git"
   },
   "scripts": {
     "build": "node utils/build.js",
