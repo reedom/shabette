@@ -12,7 +12,7 @@ export interface VoicePreference {
   // dialect code. E.g. en-US, ja-JP, etc.
   dialect?: string;
   // provider specific voice options.
-  voiceOptions: any;
+  voiceOptions?: any;
 }
 export interface GoogleVoiceOptions {
   speed?: number;
