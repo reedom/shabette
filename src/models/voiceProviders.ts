@@ -28,7 +28,7 @@ export interface ProviderVoice {
   // language code. E.g. en, ja, etc.
   lang: string;
   // dialect code. E.g. en-US, ja-JP, etc.
-  dialect?: string;
+  dialect?: string[];
 }
 
 export type Gender = 'male' | 'female' | 'neutral';
