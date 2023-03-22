@@ -1,22 +1,22 @@
-var webpack = require('webpack'),
+const webpack = require('webpack'),
   path = require('path'),
   fileSystem = require('fs-extra'),
   env = require('./utils/env'),
   CopyWebpackPlugin = require('copy-webpack-plugin'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   TerserPlugin = require('terser-webpack-plugin');
-var { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-var ReactRefreshTypeScript = require('react-refresh-typescript');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
 
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
-var alias = {};
+const alias = {};
 
 // load the secrets
-var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
+const secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
 
-var fileExtensions = [
+const fileExtensions = [
   'jpg',
   'jpeg',
   'png',
@@ -35,19 +35,20 @@ if (fileSystem.existsSync(secretsPath)) {
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-var options = {
+const options = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.jsx'),
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
-    background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
+    background: path.join(__dirname, 'src', 'background', 'index.ts'),
+    googlePlayer: path.join(__dirname, 'src', 'background', 'offscreen', 'googlePlayer.ts'),
   },
   chromeExtensionBoilerplate: {
-    notHotReload: ['background', 'contentScript', 'devtools'],
+    notHotReload: ['background', 'googlePlayer', 'contentScript', 'devtools'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -212,6 +213,12 @@ var options = {
       template: path.join(__dirname, 'src', 'pages', 'Panel', 'index.html'),
       filename: 'panel.html',
       chunks: ['panel'],
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', 'background', 'offscreen', 'googlePlayer.html'),
+      filename: 'googlePlayer.html',
+      chunks: ['googlePlayer'],
       cache: false,
     }),
   ].filter(Boolean),
