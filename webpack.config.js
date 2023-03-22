@@ -139,6 +139,9 @@ const options = {
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.DefinePlugin({
+      'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
+    }),
     new CopyWebpackPlugin({
       patterns: [
         {

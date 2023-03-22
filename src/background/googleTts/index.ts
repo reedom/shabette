@@ -1,10 +1,9 @@
 import { Internal } from './api';
-import { AppStorage } from '../storage';
 import { Gender, ProviderVoice, toVoiceKey } from '../../models/voiceProviders';
 import { GoogleVoiceOptions, VoicePreference } from '../../models/preference';
 
 export async function listVoices(lang: string): Promise<ProviderVoice[] | string> {
-  const apiKey = await AppStorage.getApiKey('google');
+  const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     return 'You need to set your Google API key first.';
   }
@@ -26,7 +25,7 @@ export async function listVoices(lang: string): Promise<ProviderVoice[] | string
 }
 
 export async function synthesize({ text, voice }: { text: string, voice: VoicePreference }) {
-  const apiKey = await AppStorage.getApiKey('google');
+  const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     return 'You need to set your Google API key first.';
   }
