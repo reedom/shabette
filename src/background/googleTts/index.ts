@@ -1,7 +1,7 @@
 import { Internal } from './api';
 import { AppStorage } from '../storage';
-import { Gender, ProviderVoice, toVoiceKey } from '../../../models/voiceProviders';
-import { GoogleVoiceOptions, VoicePreference } from '../../../models/preference';
+import { Gender, ProviderVoice, toVoiceKey } from '../../models/voiceProviders';
+import { GoogleVoiceOptions, VoicePreference } from '../../models/preference';
 
 export async function listVoices(lang: string): Promise<ProviderVoice[] | string> {
   const apiKey = await AppStorage.getApiKey('google');
@@ -63,7 +63,7 @@ async function createOffscreen() {
   if (await chrome.offscreen.hasDocument()) return;
   // @ts-ignore
   await chrome.offscreen.createDocument({
-    url: chrome.runtime.getURL('google_player.html'),
+    url: chrome.runtime.getURL('googlePlayer.html'),
     reasons: ['AUDIO_PLAYBACK'],
     justification: 'testing' // details for using the API
   });

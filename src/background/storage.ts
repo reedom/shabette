@@ -1,4 +1,4 @@
-import { VoiceKey } from '../../models/voiceProviders';
+import { VoiceKey } from '../models/voiceProviders';
 
 export namespace AppStorage {
   export interface SelectedVoices {
