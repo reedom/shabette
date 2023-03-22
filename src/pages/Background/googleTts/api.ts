@@ -101,7 +101,7 @@ export namespace Internal {
         body: JSON.stringify(input),
       })
       if (res.ok) {
-        return await res.json();
+        return (await res.json()).audioContent;
       } else {
         const ret = await res.json();
         console.warn('Fetch response is not ok:', ret);
