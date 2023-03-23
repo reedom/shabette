@@ -42,13 +42,12 @@ const options = {
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
-    devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
     background: path.join(__dirname, 'src', 'background', 'index.ts'),
     googlePlayer: path.join(__dirname, 'src', 'background', 'offscreen', 'googlePlayer.ts'),
   },
   chromeExtensionBoilerplate: {
-    notHotReload: ['background', 'googlePlayer', 'contentScript', 'devtools'],
+    notHotReload: ['background', 'googlePlayer', 'contentScript'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -204,12 +203,6 @@ const options = {
       template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),
       filename: 'popup.html',
       chunks: ['popup'],
-      cache: false,
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.html'),
-      filename: 'devtools.html',
-      chunks: ['devtools'],
       cache: false,
     }),
     new HtmlWebpackPlugin({
