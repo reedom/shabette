@@ -1,8 +1,25 @@
 import { Internal } from './api';
 import { Gender, ProviderVoice, toVoiceKey } from '../../models/voiceProviders';
 import { GoogleVoiceOptions, VoicePreference } from '../../models/preference';
+import { Memcache } from '../../utils/memcache';
 
 export async function listVoices(lang: string): Promise<ProviderVoice[] | string> {
+  const cacheKey = `google.listVoices.${lang}`;
+  const cached = Memcache.get<ProviderVoice[]>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const res = await _listVoices(lang);
+  if (typeof res === 'string') {
+    return res;
+  }
+
+  Memcache.set(cacheKey, res);
+  return res;
+}
+
+async function _listVoices(lang: string): Promise<ProviderVoice[] | string> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     return 'You need to set your Google API key first.';
