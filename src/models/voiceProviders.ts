@@ -1,7 +1,7 @@
-export type VoiceProviderId =
-  | 'google';
-
-export const GoogleVoiceProviderId: VoiceProviderId = 'google';
+export enum VoiceProviderId {
+  google = 'google',
+  amazon = 'amazon',
+}
 
 export type VoiceKey = string; // voiceProviderId "|" voiceId
 

@@ -1,6 +1,6 @@
 import { messageHandler } from './messageHandlers';
-import { AppStorage } from './storage';
 import { synthesize } from './googleTts';
+import { VoiceProviderId } from '../models/voiceProviders';
 
 chrome.runtime.onMessage.addListener(messageHandler);
 
@@ -17,7 +17,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     synthesize({
       text,
       voice: {
-        providerId: 'google',
+        providerId: VoiceProviderId.google,
         lang: 'en',
         voiceId: 'en-US-Standard-A',
         key: 'google|en-US-Standard-A',
