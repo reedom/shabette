@@ -37,6 +37,7 @@ async function _listVoices(lang: string): Promise<ProviderVoice[] | string> {
       voiceId: v.name,
       lang,
       dialect: v.languageCodes,
+      gender: toExternalGender(v.ssmlGender),
     }
   });
 }
@@ -93,4 +94,14 @@ function toInternalGender(gender: Gender | undefined): Internal.Gender | undefin
     return 'FEMALE';
   }
   return undefined;
+}
+
+function toExternalGender(gender: Internal.Gender): Gender {
+  switch (gender) {
+  case 'MALE':
+    return 'male';
+  case 'FEMALE':
+    return 'female';
+  }
+  return 'unknown';
 }
