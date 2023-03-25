@@ -14,6 +14,10 @@ export function fromVoiceKey(voiceKey: VoiceKey): { providerId: VoiceProviderId,
   return { providerId: (providerId as VoiceProviderId), voiceId };
 }
 
+export function langCodeToLang(langCode: string): string {
+  return langCode.split('-')[0];
+}
+
 export interface VoiceProvider {
   id: VoiceProviderId;
   name: string;
