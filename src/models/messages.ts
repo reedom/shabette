@@ -27,3 +27,12 @@ export async function sendBackgroundMessage<M extends BackgroundMessage>(msg: M)
     }
   });
 }
+
+// Return available voices for the given language.
+export async function listVoices(args: {providerId: VoiceProviderId, lang: string}): Promise<ProviderVoice[]> {
+  const res = await sendBackgroundMessage({ type: 'listVoices', ...args });
+  if (typeof res === 'string') {
+    throw new Error(res);
+  }
+  return res;
+}
