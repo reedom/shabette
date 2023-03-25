@@ -1,32 +1,32 @@
 import { VoiceKey } from '../models/voiceProviders';
 
 export namespace AppStorage {
-  export interface SelectedVoices {
-    [lang: string]: VoiceKey;
-  }
-
   export interface VoiceOptions {
     [key: VoiceKey]: any;
   }
 
-  export async function getApiKey(service: string): Promise<string | null> {
-    const key = `apiKey.${service}`;
+  export async function getSelectedVoice(lang: string): Promise<VoiceKey | null> {
+    const key = `prefs.selectedVoice.${lang}`;
     const item = await chrome.storage.sync.get({ [key]: null });
-    return item[key] || null;
+    return item[key];
   }
 
-  export function setApiKey(service: string, apiKey: string) {
-    const key = `apiKey.${service}`;
-    chrome.storage.sync.set({ [key]: apiKey }).catch(console.error);
+  export function setSelectedVoice(lang: string, voiceKey: VoiceKey) {
+    const key = `prefs.selectedVoice.${lang}`;
+    const item = { [key]: voiceKey };
+    chrome.storage.sync.set({ item }).catch(console.error);
   }
 
-  export async function getSelectedVoices(): Promise<SelectedVoices> {
-    const item = await chrome.storage.sync.get({ selectedVoices: {} });
-    return item.selectedVoices;
+  export async function getPinnedVoices(lang: string): Promise<VoiceKey[]> {
+    const key = `prefs.pinnedVoice.${lang}`;
+    const item = await chrome.storage.sync.get({ [key]: [] });
+    return item[key];
   }
 
-  export function setSelectedVoices(selectedVoices: SelectedVoices) {
-    chrome.storage.sync.set({ selectedVoices }).catch(console.error);
+  export function setPinnedVoices(lang: string, voiceKeys: VoiceKey[]) {
+    const key = `prefs.pinnedVoice.${lang}`;
+    const item = { [key]: voiceKeys };
+    chrome.storage.sync.set({ item }).catch(console.error);
   }
 
   export async function getVoiceOptions(voiceKeys: VoiceKey[]): Promise<VoiceOptions> {
@@ -40,6 +40,6 @@ export namespace AppStorage {
   }
 
   export async function setVoiceOption(voiceKey: VoiceKey, option: any) {
-    chrome.storage.sync.set({[voiceKey]: option}).catch(console.error);
+    chrome.storage.sync.set({ [voiceKey]: option }).catch(console.error);
   }
 }

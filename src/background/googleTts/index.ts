@@ -1,5 +1,5 @@
-import { Internal } from './api';
-import { Gender, ProviderVoice, toVoiceKey } from '../../models/voiceProviders';
+import { GoogleTtsInternal } from './api';
+import { Gender, langCodeToLang, ProviderVoice, toVoiceKey, VoiceProviderId } from '../../models/voiceProviders';
 import { GoogleVoiceOptions, VoicePreference } from '../../models/preference';
 import { Memcache } from '../../utils/memcache';
 
@@ -10,35 +10,38 @@ export async function listVoices(lang: string): Promise<ProviderVoice[] | string
     return cached;
   }
 
-  const res = await _listVoices(lang);
-  if (typeof res === 'string') {
-    return res;
-  }
+  try {
+    const res = await _listVoices();
+    if (typeof res === 'string') {
+      return res;
+    }
 
-  res.sort((a, b) => a.voiceId.localeCompare(b.voiceId));
-  Memcache.set(cacheKey, res);
-  return res;
+    res.sort((a, b) => a.voiceId.localeCompare(b.voiceId));
+    Memcache.set(cacheKey, res);
+    return res;
+  } catch (err) {
+    console.warn('Failed to list voices', err);
+    return err instanceof Error ? err.message : `${err}`;
+  }
 }
 
-async function _listVoices(lang: string): Promise<ProviderVoice[] | string> {
+async function _listVoices(): Promise<ProviderVoice[] | string> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     return 'You need to set your Google API key first.';
   }
 
-  const res = await Internal.listVoices({ apiKey: apiKey, lang: lang });
-  if (res instanceof Error) {
-    return res.message;
-  }
-
+  const res = await GoogleTtsInternal.listVoices({ apiKey: apiKey });
+  console.log('google voices', res);
   return res.map(v => {
     return {
-      key: toVoiceKey('google', v.name),
-      providerId: 'google',
+      key: toVoiceKey(VoiceProviderId.google, v.name),
+      providerId: VoiceProviderId.google,
       voiceId: v.name,
-      lang,
+      lang: langCodeToLang(v.languageCodes[0]),
       dialect: v.languageCodes,
       gender: toExternalGender(v.ssmlGender),
+      engines: [extractEngine(v.name)],
     }
   });
 }
@@ -49,24 +52,25 @@ export async function synthesize({ text, voice }: { text: string, voice: VoicePr
     return 'You need to set your Google API key first.';
   }
 
-  const options: GoogleVoiceOptions | undefined = voice.voiceOptions;
-  const res = await Internal.synthesize({
-    apiKey,
-    text,
-    lang: voice.lang,
-    voice: voice.voiceId,
-    options: {
-      pitch: options?.pitch,
-      volume: options?.volume,
-      speed: options?.speed,
-      gender: toInternalGender(options?.gender),
-    },
-  });
-
-  if (res instanceof Error) {
-    return res.message;
+  try {
+    const options: GoogleVoiceOptions | undefined = voice.voiceOptions;
+    const res = await GoogleTtsInternal.synthesize({
+      apiKey,
+      text,
+      lang: voice.lang,
+      voice: voice.voiceId,
+      options: {
+        pitch: options?.pitch,
+        volume: options?.volume,
+        speed: options?.speed,
+        gender: toInternalGender(options?.gender),
+      },
+    });
+    await playVoice(res);
+  } catch (err) {
+    console.warn('Failed to synthesize', err);
+    return err instanceof Error ? err.message : `${err}`;
   }
-  await playVoice(res);
 }
 
 async function playVoice(audio_string: string) {
@@ -87,7 +91,7 @@ async function createOffscreen() {
   });
 }
 
-function toInternalGender(gender: Gender | undefined): Internal.Gender | undefined {
+function toInternalGender(gender: Gender | undefined): GoogleTtsInternal.Gender | undefined {
   switch (gender) {
   case 'male':
     return 'MALE';
@@ -97,7 +101,7 @@ function toInternalGender(gender: Gender | undefined): Internal.Gender | undefin
   return undefined;
 }
 
-function toExternalGender(gender: Internal.Gender): Gender {
+function toExternalGender(gender: GoogleTtsInternal.Gender): Gender {
   switch (gender) {
   case 'MALE':
     return 'male';
@@ -105,4 +109,12 @@ function toExternalGender(gender: Internal.Gender): Gender {
     return 'female';
   }
   return 'unknown';
+}
+
+function extractEngine(voiceName: string) {
+  const m = voiceName.split('-');
+  if (m.length < 3) {
+    return 'standard';
+  }
+  return m[2].toLowerCase();
 }

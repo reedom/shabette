@@ -1,4 +1,4 @@
-export namespace Internal {
+export namespace GoogleTtsInternal {
   export type Gender = 'MALE' | 'FEMALE';
 
   export type AudioEncoding =
@@ -42,28 +42,31 @@ export namespace Internal {
   }
 
   export async function listVoices({
-    apiKey, lang
+    apiKey
   }: {
     apiKey: string;
-    lang: string;
-  }): Promise<Voice[] | Error> {
-    const endpoint = `https://texttospeech.googleapis.com/v1/voices?languageCode=${lang}&key=${apiKey}`;
+  }): Promise<Voice[]> {
+    const endpoint = `https://texttospeech.googleapis.com/v1/voices?key=${apiKey}`;
+    let error: Error;
     try {
       const res = await fetch(endpoint)
       if (res.ok) {
         return (await res.json()).voices;
-      } else {
-        const ret = await res.json();
-        console.warn('Fetch response is not ok:', ret);
-        return new Error(`Fetch response is not ok: ${ret}`);
       }
+
+      const ret = await res.json();
+      console.warn('Fetch response is not ok:', ret);
+      error = new Error(`Fetch response is not ok: ${ret}`);
     } catch (err) {
       console.log('Failed to fetch voices', err);
-      if (err instanceof Error) {
-        return err;
+      if (err instanceof Error){
+        throw err;
+      } else {
+        throw new Error(`Failed to fetch voices: ${err}`);
       }
-      return new Error(`Failed to fetch voices: ${err}`);
     }
+
+    throw error;
   }
 
 
@@ -75,8 +78,9 @@ export namespace Internal {
     lang: string;
     voice: string;
     options?: VoiceOptions,
-  }): Promise<string | Error> {
+  }): Promise<string> {
     const endpoint = `https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=${apiKey}`;
+    let error: Error;
     try {
       const input: SynthesizeBody = {
         "input": { "text": text },
@@ -105,14 +109,16 @@ export namespace Internal {
       } else {
         const ret = await res.json();
         console.warn('Fetch response is not ok:', ret);
-        return new Error(`Fetch response is not ok: ${ret}`);
+        error = new Error(`Fetch response is not ok: ${ret}`);
       }
     } catch (err) {
       console.warn('Failed to synthesize', err);
       if (err instanceof Error) {
-        return err;
+        throw err;
+      } else {
+        throw new Error(`Failed to synthesize: ${err}`);
       }
-      return new Error(`Failed to synthesize: ${err}`);
     }
+    throw error;
   }
 }
