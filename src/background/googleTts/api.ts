@@ -51,7 +51,7 @@ export namespace Internal {
     try {
       const res = await fetch(endpoint)
       if (res.ok) {
-        return await res.json();
+        return (await res.json()).voices;
       } else {
         const ret = await res.json();
         console.warn('Fetch response is not ok:', ret);
