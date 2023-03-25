@@ -135,6 +135,8 @@ const options = {
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({
       'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
+      'process.env.AWS_API_ACCESS_KEY': JSON.stringify(process.env.AWS_API_ACCESS_KEY),
+      'process.env.AWS_API_SECRET': JSON.stringify(process.env.AWS_API_SECRET),
     }),
     new VanillaExtractPlugin(),
     new MiniCssExtractPlugin(),

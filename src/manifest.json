@@ -8,13 +8,14 @@
     "contextMenus",
     "storage",
     "offscreen"
-  ],  "host_permissions": [
-    "https://*.googleapis.com/",
-    "https://*.google.com/",
-    "https://*.gstatic.com/"
-  ],
+  ], "host_permissions": [
+  "https://*.amazonaws.com/",
+  "https://*.googleapis.com/",
+  "https://*.google.com/",
+  "https://*.gstatic.com/"
+],
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "background": {"service_worker": "background.bundle.js"},
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
