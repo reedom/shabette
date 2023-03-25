@@ -37,6 +37,8 @@ export interface ProviderVoice {
   dialect?: string[];
   // gender.
   gender: Gender;
+  // supported engines. E.g. "standard", "neural", etc.
+  engines: string[];
 }
 
 export type Gender = 'male' | 'female' | 'neutral' | 'unknown';
