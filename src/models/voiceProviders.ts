@@ -1,6 +1,8 @@
 export type VoiceProviderId =
   | 'google';
 
+export const GoogleVoiceProviderId: VoiceProviderId = 'google';
+
 export type VoiceKey = string; // voiceProviderId "|" voiceId
 
 export function toVoiceKey(providerId: VoiceProviderId, voiceId: string) {
