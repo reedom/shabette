@@ -15,7 +15,8 @@ export async function listVoices(): Promise<ProviderVoice[] | string> {
       return res;
     }
 
-    res.sort((a, b) => a.voiceId.localeCompare(b.voiceId));
+    res.sort((a, b) =>
+      a.lang.localeCompare(b.lang) || a.voiceId.localeCompare(b.voiceId));
     Memcache.set(cacheKey, res);
     return res;
   } catch (err) {
