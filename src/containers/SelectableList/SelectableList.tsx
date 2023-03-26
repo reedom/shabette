@@ -18,6 +18,7 @@ export default function SelectableList(props: Props) {
     <div className={styles.container}>
       {items.map(item => (
         <div
+          key={item.value}
           className={item.value === selected ? styles.selectedItem : styles.item}
           onClick={item.value === selected ? undefined : item.onClick}
         >{item.label}</div>
