@@ -3,8 +3,8 @@ import { Gender, langCodeToLang, ProviderVoice, toVoiceKey, VoiceProviderId } fr
 import { GoogleVoiceOptions, VoicePreference } from '../../models/preference';
 import { Memcache } from '../../utils/memcache';
 
-export async function listVoices(lang: string): Promise<ProviderVoice[] | string> {
-  const cacheKey = `google.listVoices.${lang}`;
+export async function listVoices(): Promise<ProviderVoice[] | string> {
+  const cacheKey = `google.listVoices`;
   const cached = Memcache.get<ProviderVoice[]>(cacheKey);
   if (cached) {
     return cached;

@@ -5,26 +5,26 @@ export namespace AppStorage {
     [key: VoiceKey]: any;
   }
 
-  export async function getSelectedVoice(lang: string): Promise<VoiceKey | null> {
-    const key = `prefs.selectedVoice.${lang}`;
+  export async function getSelectedVoice(): Promise<VoiceKey | null> {
+    const key = `prefs.selectedVoice`;
     const item = await chrome.storage.sync.get({ [key]: null });
     return item[key];
   }
 
-  export function setSelectedVoice(lang: string, voiceKey: VoiceKey) {
-    const key = `prefs.selectedVoice.${lang}`;
+  export function setSelectedVoice(voiceKey: VoiceKey) {
+    const key = `prefs.selectedVoice`;
     const item = { [key]: voiceKey };
     chrome.storage.sync.set({ item }).catch(console.error);
   }
 
-  export async function getPinnedVoices(lang: string): Promise<VoiceKey[]> {
-    const key = `prefs.pinnedVoice.${lang}`;
+  export async function getPinnedVoices(): Promise<VoiceKey[]> {
+    const key = `prefs.pinnedVoice`;
     const item = await chrome.storage.sync.get({ [key]: [] });
     return item[key];
   }
 
-  export function setPinnedVoices(lang: string, voiceKeys: VoiceKey[]) {
-    const key = `prefs.pinnedVoice.${lang}`;
+  export function setPinnedVoices(voiceKeys: VoiceKey[]) {
+    const key = `prefs.pinnedVoice`;
     const item = { [key]: voiceKeys };
     chrome.storage.sync.set({ item }).catch(console.error);
   }

@@ -15,7 +15,7 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
   case 'listVoices':
     switch (msg.providerId) {
     case VoiceProviderId.google:
-      googleTtsListVoices(msg.lang)
+      googleTtsListVoices()
         .then(sendResponse)
         .catch(err => sendResponse(err.message));
       return true;
@@ -28,33 +28,35 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
     return;
 
   case 'preference.selectVoice':
-    AppStorage.setSelectedVoice(msg.lang, toVoiceKey(msg.providerId, msg.voiceId));
+    AppStorage.setSelectedVoice(toVoiceKey(msg.providerId, msg.voiceId));
     return;
 
   case 'preference.selectedVoice':
-    AppStorage.getSelectedVoice(msg.lang)
+    AppStorage.getSelectedVoice()
       .then(voiceKey => {
-        sendResponse(voiceKey ? fromVoiceKey(voiceKey) : undefined);
+        sendResponse(voiceKey ? { key: voiceKey, ...fromVoiceKey(voiceKey) } : undefined);
       })
       .catch(err => sendResponse(err.message));
     return true;
 
   case 'preference.pinVoice':
-    AppStorage.getPinnedVoices(msg.lang)
+    AppStorage.getPinnedVoices()
       .then(pinnedVoices => {
         const voiceKey = toVoiceKey(msg.providerId, msg.voiceId);
         const newVoices = pinnedVoices.filter(v => v !== voiceKey);
         if (msg.pin) {
-          newVoices.push(voiceKey);
+          newVoices.unshift(voiceKey);
         }
-        AppStorage.setPinnedVoices(msg.lang, newVoices);
+        AppStorage.setPinnedVoices(newVoices);
       })
       .catch(err => sendResponse(err.message));
     return true;
 
   case 'preference.pinnedVoices':
-    AppStorage.getPinnedVoices(msg.lang)
-      .then(pinnedVoices => sendResponse(pinnedVoices.map(fromVoiceKey)))
+    AppStorage.getPinnedVoices()
+      .then(pinnedVoices => sendResponse(
+        pinnedVoices.map(voiceKey => ({ key: voiceKey, ...fromVoiceKey(voiceKey) }))
+      ))
       .catch(err => sendResponse(err.message));
     return true;
   }
