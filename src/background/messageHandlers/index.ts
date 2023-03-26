@@ -45,7 +45,7 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
   case 'preference.selectedVoice':
     AppStorage.getSelectedVoice()
       .then(voiceKey => {
-        sendResponse(voiceKey ? { key: voiceKey, ...fromVoiceKey(voiceKey) } : undefined);
+        sendResponse(voiceKey ? { voiceKey, ...fromVoiceKey(voiceKey) } : undefined);
       })
       .catch(err => sendResponse(err.message));
     return true;
@@ -66,7 +66,7 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
   case 'preference.pinnedVoices':
     AppStorage.getPinnedVoices()
       .then(pinnedVoices => sendResponse(
-        pinnedVoices.map(voiceKey => ({ key: voiceKey, ...fromVoiceKey(voiceKey) }))
+        pinnedVoices.map(voiceKey => ({ voiceKey, ...fromVoiceKey(voiceKey) }))
       ))
       .catch(err => sendResponse(err.message));
     return true;
