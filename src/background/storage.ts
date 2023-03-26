@@ -1,8 +1,20 @@
-import { VoiceKey } from '../models/voiceProviders';
+import { VoiceKey, VoiceProviderId } from '../models/voiceProviders';
 
 export namespace AppStorage {
   export interface VoiceOptions {
     [key: VoiceKey]: any;
+  }
+
+  export async function getSelectedVoiceProvider(): Promise<VoiceProviderId | null> {
+    const key = `prefs.selectedVoiceProvider`;
+    const item = await chrome.storage.sync.get({ [key]: null });
+    return item[key];
+  }
+
+  export function setSelectedVoiceProvider(providerId: VoiceProviderId) {
+    const key = `prefs.selectedVoiceProvider`;
+    const item = { [key]: providerId };
+    chrome.storage.sync.set(item).catch(console.error);
   }
 
   export async function getSelectedVoice(): Promise<VoiceKey | null> {
@@ -14,7 +26,7 @@ export namespace AppStorage {
   export function setSelectedVoice(voiceKey: VoiceKey) {
     const key = `prefs.selectedVoice`;
     const item = { [key]: voiceKey };
-    chrome.storage.sync.set({ item }).catch(console.error);
+    chrome.storage.sync.set(item).catch(console.error);
   }
 
   export async function getPinnedVoices(): Promise<VoiceKey[]> {
@@ -26,7 +38,7 @@ export namespace AppStorage {
   export function setPinnedVoices(voiceKeys: VoiceKey[]) {
     const key = `prefs.pinnedVoice`;
     const item = { [key]: voiceKeys };
-    chrome.storage.sync.set({ item }).catch(console.error);
+    chrome.storage.sync.set(item).catch(console.error);
   }
 
   export async function getVoiceOptions(voiceKeys: VoiceKey[]): Promise<VoiceOptions> {

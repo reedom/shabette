@@ -3,7 +3,7 @@ import { listProviders } from './providers';
 import { AppStorage } from '../storage';
 import { listVoices as googleTtsListVoices } from '../googleTts';
 import { listVoices as amazonTtsListVoices } from '../amazonPolly';
-import { BackgroundMessage } from '../../models/messages';
+import { BackgroundMessage } from '../../models/backgroundMessages';
 import { fromVoiceKey, toVoiceKey, VoiceProviderId } from '../../models/voiceProviders';
 
 export function messageHandler<M extends BackgroundMessage>(msg: M, sender: MessageSender, sendResponse: (response?: any) => void) {
@@ -26,6 +26,17 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
       return true;
     }
     return;
+
+  case 'ui.selectVoiceProvider':
+    AppStorage.setSelectedVoiceProvider(msg.providerId);
+    return;
+
+  case 'ui.selectedVoiceProvider':
+    AppStorage.getSelectedVoiceProvider()
+      .then(providerId => {
+        sendResponse(providerId || VoiceProviderId.google);
+      });
+    return true;
 
   case 'preference.selectVoice':
     AppStorage.setSelectedVoice(toVoiceKey(msg.providerId, msg.voiceId));
