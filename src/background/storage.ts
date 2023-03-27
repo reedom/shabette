@@ -1,4 +1,4 @@
-import { VoiceKey, VoiceProviderId } from '../models/voiceProviders';
+import { ProviderVoice, VoiceKey, VoiceProviderId } from '../models/voiceProviders';
 
 export namespace AppStorage {
   export interface VoiceOptions {
@@ -17,15 +17,15 @@ export namespace AppStorage {
     chrome.storage.sync.set(item).catch(console.error);
   }
 
-  export async function getSelectedVoice(): Promise<VoiceKey | null> {
+  export async function getSelectedVoice(): Promise<ProviderVoice | null> {
     const key = `prefs.selectedVoice`;
     const item = await chrome.storage.sync.get({ [key]: null });
     return item[key];
   }
 
-  export function setSelectedVoice(voiceKey: VoiceKey) {
+  export function setSelectedVoice(voice: ProviderVoice) {
     const key = `prefs.selectedVoice`;
-    const item = { [key]: voiceKey };
+    const item = { [key]: voice };
     chrome.storage.sync.set(item).catch(console.error);
   }
 

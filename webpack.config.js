@@ -46,10 +46,10 @@ const options = {
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
     background: path.join(__dirname, 'src', 'background', 'index.ts'),
-    googlePlayer: path.join(__dirname, 'src', 'background', 'offscreen', 'googlePlayer.ts'),
+    audioPlayer: path.join(__dirname, 'src', 'background', 'offscreen', 'audioPlayer.ts'),
   },
   chromeExtensionBoilerplate: {
-    notHotReload: ['background', 'googlePlayer', 'contentScript'],
+    notHotReload: ['background', 'audioPlayer', 'contentScript'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -211,9 +211,9 @@ const options = {
       cache: false,
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'background', 'offscreen', 'googlePlayer.html'),
-      filename: 'googlePlayer.html',
-      chunks: ['googlePlayer'],
+      template: path.join(__dirname, 'src', 'background', 'offscreen', 'audioPlayer.html'),
+      filename: 'audioPlayer.html',
+      chunks: ['audioPlayer'],
       cache: false,
     }),
   ].filter(Boolean),

@@ -1,11 +1,11 @@
 import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 import { getSelectedVoice, selectVoice } from '../models/backgroundMessages';
-import { toVoiceKey, VoiceKey, VoiceProviderId } from '../models/voiceProviders';
+import { ProviderVoice } from '../models/voiceProviders';
 
 type Props = PropsWithChildren;
 
 type State = {
-  selectedVoice: { voiceKey: VoiceKey, providerId: VoiceProviderId, voiceId: string } | undefined,
+  selectedVoice: ProviderVoice | undefined,
   isLoading: boolean;
   selectVoice: typeof selectVoice,
 }
@@ -13,7 +13,7 @@ type State = {
 const StateContext = createContext<State>({} as State);
 
 export const SelectedVoiceProvider: FC<Props> = ({ children }) => {
-  const [selectedVoice, setSelectedVoice] = useState<{ voiceKey: VoiceKey, providerId: VoiceProviderId, voiceId: string } | undefined>();
+  const [selectedVoice, setSelectedVoice] = useState<ProviderVoice | undefined>();
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,10 +23,9 @@ export const SelectedVoiceProvider: FC<Props> = ({ children }) => {
     });
   }, []);
 
-  const _selectVoice = useCallback((args: { providerId: VoiceProviderId, voiceId: string }) => {
-    selectVoice(args);
-    const voiceKey = toVoiceKey(args.providerId, args.voiceId);
-    setSelectedVoice({ voiceKey, ...args });
+  const _selectVoice = useCallback((voice: ProviderVoice) => {
+    selectVoice(voice);
+    setSelectedVoice(voice);
   }, []);
 
   return (

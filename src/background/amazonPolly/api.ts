@@ -1,5 +1,11 @@
-import { Voice } from '@aws-sdk/client-polly/dist-types/models/models_0';
-import { DescribeVoicesCommand, PollyClient } from '@aws-sdk/client-polly';
+import {
+  DescribeVoicesCommand,
+  OutputFormat,
+  PollyClient,
+  SynthesizeSpeechCommand,
+  TextType,
+  Voice,
+} from '@aws-sdk/client-polly';
 
 const region = 'ap-northeast-1';
 
@@ -40,5 +46,34 @@ export namespace AmazonPollyInternal {
       nextToken = res.NextToken;
     } while (nextToken && 0 < --sentinel);
     return voices;
+  }
+
+
+  export async function synthesize({
+    voiceId, text, dialect, // options
+  }: {
+    voiceId: string;
+    text: string;
+    dialect?: string;
+    // options?: VoiceOptions,
+  }): Promise<Uint8Array> {
+    try {
+      const client = createClient();
+      const res = await client.send(new SynthesizeSpeechCommand({
+        VoiceId: voiceId,
+        Text: text,
+        LanguageCode: dialect,
+        OutputFormat: OutputFormat.MP3,
+        TextType: TextType.TEXT,
+      }));
+      return await res!.AudioStream!.transformToByteArray();
+    } catch (err) {
+      console.warn('Failed to synthesize', err);
+      if (err instanceof Error) {
+        throw err;
+      } else {
+        throw new Error(`Failed to synthesize: ${err}`);
+      }
+    }
   }
 }

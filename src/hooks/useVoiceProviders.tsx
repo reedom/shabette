@@ -36,7 +36,7 @@ export const VoiceProvidersProvider: FC<Props> = ({ children }) => {
   const _selectVoiceProvider = useCallback(
     (providerId: VoiceProviderId) => {
       console.log('select', providerId);
-      selectVoiceProvider({ providerId });
+      selectVoiceProvider(providerId);
       updateSelectedVoiceProvider(providerId);
     }, [updateSelectedVoiceProvider]);
 

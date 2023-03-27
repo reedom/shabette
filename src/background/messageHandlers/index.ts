@@ -1,8 +1,8 @@
 import MessageSender = chrome.runtime.MessageSender;
 import { listProviders } from './providers';
 import { AppStorage } from '../storage';
-import { listVoices as googleTtsListVoices } from '../googleTts';
-import { listVoices as amazonTtsListVoices } from '../amazonPolly';
+import { GoogleTts } from '../googleTts';
+import { AmazonPolly } from '../amazonPolly';
 import { BackgroundMessage } from '../../models/backgroundMessages';
 import { fromVoiceKey, toVoiceKey, VoiceProviderId } from '../../models/voiceProviders';
 
@@ -15,12 +15,12 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
   case 'listVoices':
     switch (msg.providerId) {
     case VoiceProviderId.google:
-      googleTtsListVoices()
+      GoogleTts.listVoices()
         .then(sendResponse)
         .catch(err => sendResponse(err.message));
       return true;
     case VoiceProviderId.amazon:
-      amazonTtsListVoices()
+      AmazonPolly.listVoices()
         .then(sendResponse)
         .catch(err => sendResponse(err.message));
       return true;
@@ -39,13 +39,13 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
     return true;
 
   case 'preference.selectVoice':
-    AppStorage.setSelectedVoice(toVoiceKey(msg.providerId, msg.voiceId));
+    AppStorage.setSelectedVoice(msg.voice);
     return;
 
   case 'preference.selectedVoice':
     AppStorage.getSelectedVoice()
-      .then(voiceKey => {
-        sendResponse(voiceKey ? { voiceKey, ...fromVoiceKey(voiceKey) } : undefined);
+      .then(voice => {
+        sendResponse(voice || undefined);
       })
       .catch(err => sendResponse(err.message));
     return true;

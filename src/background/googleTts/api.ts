@@ -59,7 +59,7 @@ export namespace GoogleTtsInternal {
       error = new Error(`Fetch response is not ok: ${ret}`);
     } catch (err) {
       console.log('Failed to fetch voices', err);
-      if (err instanceof Error){
+      if (err instanceof Error) {
         throw err;
       } else {
         throw new Error(`Failed to fetch voices: ${err}`);
