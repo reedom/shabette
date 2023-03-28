@@ -50,6 +50,25 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
       .catch(err => sendResponse(err.message));
     return true;
 
+  case 'preference.pinLang':
+    AppStorage.getPinnedLangs()
+      .then(pinnedLangs => {
+        const newLangs = pinnedLangs.filter(v => v !== msg.lang);
+        if (msg.pin) {
+          newLangs.unshift(msg.lang);
+          newLangs.sort();
+        }
+        AppStorage.setPinnedLangs(newLangs);
+      })
+      .catch(err => sendResponse(err.message));
+    return true;
+
+  case 'preference.pinnedLangs':
+    AppStorage.getPinnedLangs()
+      .then(sendResponse)
+      .catch(err => sendResponse(err.message));
+    return true;
+
   case 'preference.pinVoice':
     AppStorage.getPinnedVoices()
       .then(pinnedVoices => {

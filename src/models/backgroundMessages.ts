@@ -9,6 +9,8 @@ export type BackgroundMessage =
   | { type: 'ui.selectedVoiceProvider' }
   | { type: 'preference.selectVoice', voice: ProviderVoice }
   | { type: 'preference.selectedVoice' }
+  | { type: 'preference.pinLang', lang: string, pin: boolean }
+  | { type: 'preference.pinnedLangs' }
   | { type: 'preference.pinVoice', lang: string, providerId: VoiceProviderId, voiceId: string, pin: boolean }
   | { type: 'preference.pinnedVoices' }
   | { type: 'preference.listVoices' }
@@ -21,6 +23,8 @@ type BackgroundMessageReturnType<T> =
   T extends { type: 'ui.selectedVoiceProvider' } ? VoiceProviderId :
   T extends { type: 'preference.selectVoice', voice: ProviderVoice } ? void :
   T extends { type: 'preference.selectedVoice' } ? ProviderVoice | undefined :
+  T extends { type: 'preference.pinLang', lang: string, pin: boolean } ? void :
+  T extends { type: 'preference.pinnedLangs' } ? string[] :
   T extends { type: 'preference.pinVoice', lang: string, providerId: VoiceProviderId, voiceId: string, pin: boolean } ? void :
   T extends { type: 'preference.pinnedVoices' } ? { voiceKey: VoiceKey, providerId: VoiceProviderId, voiceId: string }[] :
   T extends { type: 'preference.listVoices' } ? VoicePreference[] :
@@ -68,6 +72,16 @@ export function selectVoice(voice: ProviderVoice ) {
 // Return selected voice for the given language.
 export async function getSelectedVoice(): Promise<ProviderVoice | undefined> {
   return await sendBackgroundMessage({ type: 'preference.selectedVoice' });
+}
+
+// Pin lang.
+export function pinLang(args: { lang: string, pin: boolean }) {
+  sendBackgroundMessage({ type: 'preference.pinLang', ...args }).catch(console.error);
+}
+
+// Return pinned languages.
+export async function getPinnedLangs(): Promise<string[]> {
+  return await sendBackgroundMessage({ type: 'preference.pinnedLangs' });
 }
 
 // Save the selected voice for the given language.

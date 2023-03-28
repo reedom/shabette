@@ -29,6 +29,18 @@ export namespace AppStorage {
     chrome.storage.sync.set(item).catch(console.error);
   }
 
+  export async function getPinnedLangs(): Promise<string[]> {
+    const key = `prefs.pinnedLang`;
+    const item = await chrome.storage.sync.get({ [key]: [] });
+    return item[key];
+  }
+
+  export function setPinnedLangs(langs: string[]) {
+    const key = `prefs.pinnedLang`;
+    const item = { [key]: langs };
+    chrome.storage.sync.set(item).catch(console.error);
+  }
+
   export async function getPinnedVoices(): Promise<VoiceKey[]> {
     const key = `prefs.pinnedVoice`;
     const item = await chrome.storage.sync.get({ [key]: [] });
