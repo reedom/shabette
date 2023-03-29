@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
-  display: 'inline-block',
+  display: 'block',
   padding: '4px 8px',
   margin: '2px 3px',
 });

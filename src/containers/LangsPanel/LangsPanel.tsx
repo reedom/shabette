@@ -30,10 +30,7 @@ export default function LangsPanel(props: Props) {
         <Chip
           label={lang}
           color={lang === selectedLang ? 'primary' : 'default'} key={lang}
-          onClick={() => {
-            console.log('onClick');
-            selectLang(lang)
-          }}
+          onClick={() => selectLang(lang)}
         />
       ))}
     </div>
