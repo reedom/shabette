@@ -1,14 +1,14 @@
 import React from 'react';
 import { PinnedLangsProvider, usePinnedLangs } from '../../hooks/usePinnedLangs';
-import { SelectedLangProvider } from '../../hooks/useSelectedLang';
+import { SelectedLangProvider, useSelectedLang } from '../../hooks/useSelectedLang';
 import { useVoiceProviders } from '../../hooks/useVoiceProviders';
 import { useAvailableVoices } from '../../hooks/useAvailableVoices';
 import { useSelectedVoice } from '../../hooks/useSelectedVoice';
 import { usePinnedVoices } from '../../hooks/usePinnedVoices';
 import LangsPanel from '../LangsPanel';
 import SelectableList from '../SelectableList';
-import { ProviderVoice, VoiceProvider } from '../../models/voiceProviders';
-import VoiceItem from '../VoiceItem';
+import { VoiceProvider } from '../../models/voiceProviders';
+import SelectableVoiceList from './SelectableVoiceList';
 
 type Props = {}
 
@@ -29,6 +29,7 @@ export default function VoiceSelectionPanel(props: Props) {
 }
 
 function Content(props: Props) {
+  const { selectedLang, selectLang, isLoading: isLoadingLang } = useSelectedLang();
   const { pinnedLangs, pinLang, isLoading: isLoadingPinnedLangs } = usePinnedLangs();
   const { voiceProviders, selectedVoiceProvider, selectVoiceProvider, isLoading: isLoadingVoiceProviders } =
     useVoiceProviders();
@@ -36,7 +37,7 @@ function Content(props: Props) {
   const { selectVoice, selectedVoice, isLoading: isLoadingSelectedVoice } = useSelectedVoice();
   const { pinnedVoices, pinVoice, isLoading: isLoadingPinnedVoices } = usePinnedVoices();
 
-  if (isLoadingPinnedLangs || isLoadingVoiceProviders || isLoadingSelectedVoice || isLoadingPinnedVoices ||
+  if (isLoadingLang || isLoadingPinnedLangs || isLoadingVoiceProviders || isLoadingSelectedVoice || isLoadingPinnedVoices ||
     !selectedVoiceProvider || !availableVoices[selectedVoiceProvider?.id]) {
     return <div>Loading...</div>;
   }
@@ -51,13 +52,12 @@ function Content(props: Props) {
           onClick: () => selectVoiceProvider(provider.id),
         }))}
         selected={selectedVoiceProvider!.id}/>
-      {availableVoices[selectedVoiceProvider.id].map((voice: ProviderVoice) => (
-        <VoiceItem
-          {...voice}
-          selected={voice.voiceId === selectedVoice?.voiceId && voice.providerId === selectedVoice?.providerId}
-          onSelected={() => selectVoice(voice)}
-        />
-      ))}
+      <SelectableVoiceList
+        lang={selectedLang!}
+        voices={availableVoices[selectedVoiceProvider!.id]}
+        selectedVoice={selectedVoice}
+        selectVoice={selectVoice}
+      />
     </div>
   );
 }
