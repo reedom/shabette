@@ -3,8 +3,7 @@ import { Gender, langCodeToLang, ProviderVoice, toVoiceKey, VoiceProviderId } fr
 import { Memcache } from '../../utils/memcache';
 import { AmazonPollyInternal } from './api';
 import { VoicePreference } from '../../models/preference';
-import { playMP3, playWaveRawData } from '../offscreen/audioPlayerClient';
-import { playPollyVoice } from '../offscreen/pollyPlayerClient';
+import { playMP3 } from '../offscreen/audioPlayerClient';
 
 export namespace AmazonPolly {
   export async function listVoices(): Promise<ProviderVoice[] | string> {
