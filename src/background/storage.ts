@@ -5,14 +5,26 @@ export namespace AppStorage {
     [key: VoiceKey]: any;
   }
 
+  export async function getSelectedLang(): Promise<string | null> {
+    const key = `ui.selectedLang`;
+    const item = await chrome.storage.sync.get({ [key]: null });
+    return item[key];
+  }
+
+  export function setSelectedLang(lang: string) {
+    const key = `ui.selectedLang`;
+    const item = { [key]: lang };
+    chrome.storage.sync.set(item).catch(console.error);
+  }
+
   export async function getSelectedVoiceProvider(): Promise<VoiceProviderId | null> {
-    const key = `prefs.selectedVoiceProvider`;
+    const key = `ui.selectedVoiceProvider`;
     const item = await chrome.storage.sync.get({ [key]: null });
     return item[key];
   }
 
   export function setSelectedVoiceProvider(providerId: VoiceProviderId) {
-    const key = `prefs.selectedVoiceProvider`;
+    const key = `ui.selectedVoiceProvider`;
     const item = { [key]: providerId };
     chrome.storage.sync.set(item).catch(console.error);
   }

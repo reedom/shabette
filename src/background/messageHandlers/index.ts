@@ -5,9 +5,14 @@ import { GoogleTts } from '../googleTts';
 import { AmazonPolly } from '../amazonPolly';
 import { BackgroundMessage } from '../../models/backgroundMessages';
 import { fromVoiceKey, toVoiceKey, VoiceProviderId } from '../../models/voiceProviders';
+import { listLangs } from './langs';
 
 export function messageHandler<M extends BackgroundMessage>(msg: M, sender: MessageSender, sendResponse: (response?: any) => void) {
   switch (msg.type) {
+  case 'listLangs':
+    sendResponse(listLangs());
+    return;
+
   case 'listProviders':
     sendResponse(listProviders());
     return;
@@ -26,6 +31,17 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
       return true;
     }
     return;
+
+  case 'ui.selectLang':
+    AppStorage.setSelectedLang(msg.lang);
+    return;
+
+  case 'ui.selectedLang':
+    AppStorage.getSelectedLang()
+      .then(lang => {
+        sendResponse(lang || 'en');
+      });
+    return true;
 
   case 'ui.selectVoiceProvider':
     AppStorage.setSelectedVoiceProvider(msg.providerId);
@@ -65,7 +81,7 @@ export function messageHandler<M extends BackgroundMessage>(msg: M, sender: Mess
 
   case 'preference.pinnedLangs':
     AppStorage.getPinnedLangs()
-      .then(sendResponse)
+      .then((langs) => sendResponse(langs.length ? langs : ['en']))
       .catch(err => sendResponse(err.message));
     return true;
 

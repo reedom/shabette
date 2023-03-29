@@ -2,9 +2,12 @@ import { ProviderVoice, VoiceKey, VoiceProvider, VoiceProviderId } from './voice
 import { VoicePreference } from './preference';
 
 export type BackgroundMessage =
+  | { type: 'listLangs' }
   | { type: 'listProviders' }
   | { type: 'listVoices', providerId: VoiceProviderId }
   | { type: 'synthesize', providerId: VoiceProviderId, voiceId: string, text: string }
+  | { type: 'ui.selectLang', lang: string }
+  | { type: 'ui.selectedLang' }
   | { type: 'ui.selectVoiceProvider', providerId: VoiceProviderId }
   | { type: 'ui.selectedVoiceProvider' }
   | { type: 'preference.selectVoice', voice: ProviderVoice }
@@ -16,9 +19,12 @@ export type BackgroundMessage =
   | { type: 'preference.listVoices' }
 
 type BackgroundMessageReturnType<T> =
+  T extends { type: 'listLangs' } ? string[] | string :
   T extends { type: 'listProviders' } ? VoiceProvider[] :
   T extends { type: 'listVoices', providerId: VoiceProviderId } ? ProviderVoice[] | string :
   T extends { type: 'synthesize', providerId: VoiceProviderId, voiceId: string, text: string } ? string :
+  T extends { type: 'ui.selectLang', lang: string } ? void :
+  T extends { type: 'ui.selectedLang' } ? string :
   T extends { type: 'ui.selectVoiceProvider', providerId: VoiceProviderId } ? void :
   T extends { type: 'ui.selectedVoiceProvider' } ? VoiceProviderId :
   T extends { type: 'preference.selectVoice', voice: ProviderVoice } ? void :
@@ -40,6 +46,15 @@ export async function sendBackgroundMessage<M extends BackgroundMessage>(msg: M)
   });
 }
 
+// Return available languages
+export async function listLangs(): Promise<string[]> {
+  const res = await sendBackgroundMessage({ type: 'listLangs' });
+  if (typeof res === 'string') {
+    throw new Error(res);
+  }
+  return res;
+}
+
 // Return available providers.
 export async function listVoiceProviders(): Promise<VoiceProvider[]> {
   return sendBackgroundMessage({ type: 'listProviders' });
@@ -52,6 +67,16 @@ export async function listVoices(args: { providerId: VoiceProviderId }): Promise
     throw new Error(res);
   }
   return res;
+}
+
+//
+export function selectLang(lang: string) {
+  sendBackgroundMessage({ type: 'ui.selectLang', lang }).catch(console.error);
+}
+
+// Return selected voice for the given language.
+export async function getSelectedLang(): Promise<string> {
+  return await sendBackgroundMessage({ type: 'ui.selectedLang' });
 }
 
 // Save the selected voice for the given language.
