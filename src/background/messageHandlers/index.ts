@@ -10,8 +10,10 @@ import { listLangs } from './langs';
 export function messageHandler<M extends BackgroundMessage>(msg: M, sender: MessageSender, sendResponse: (response?: any) => void) {
   switch (msg.type) {
   case 'listLangs':
-    sendResponse(listLangs());
-    return;
+    listLangs()
+      .then(sendResponse)
+      .catch(console.error)
+    return true;
 
   case 'listProviders':
     sendResponse(listProviders());
