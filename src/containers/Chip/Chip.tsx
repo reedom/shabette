@@ -4,11 +4,15 @@ import * as styles from './Chip.css';
 type ChipProps = {
   label: string;
   color?: string;
+  onClick?: () => void;
 }
 export default function Chip(props: ChipProps) {
   const { label, color } = props;
   return (
-    <div className={styles.container} style={{ backgroundColor: color }}>
+    <div
+      className={props.onClick ? styles.clickableContainer : styles.container} style={{ backgroundColor: color }}
+      onClick={props.onClick}
+    >
       {label}
     </div>
   );

@@ -8,3 +8,7 @@ export const container = style({
   backgroundColor: '#232F341E',
   borderRadius: '20px',
 });
+
+export const clickableContainer = style([container, {
+  cursor: 'pointer',
+}]);
