@@ -14,11 +14,16 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+  chrome.tabs.sendMessage(tab!.id!, { type: 'parseForReader' }, (res) => {
+    console.log(res);
+  });
+  return;
+
   const text = info.selectionText;
   if (!text) {
     return;
   }
-  handleSynthesize(text).catch(console.error);
+  // handleSynthesize(text).catch(console.error);
 });
 
 export async function handleSynthesize(text: string) {
@@ -44,31 +49,3 @@ async function getVoiceForSynthesis(): Promise<ProviderVoice> {
   }
   return voices.find(v => v.voiceId === 'en-US-Standard-A') || voices[0];
 }
-
-//   const {providerId, voiceId} = fromVoiceKey(selectedVoiceKey);
-//   switch (providerId) {
-//   case VoiceProviderId.google:
-//     const googleVoices = await GoogleTts.listVoices();
-//     if (typeof googleVoices === 'string') {
-//       throw new Error(googleVoices);
-//     }
-//     return googleVoices.find(v => v.voiceId === voiceId) || googleVoices[0];
-//
-//   case VoiceProviderId.amazon:
-//     const amazonVoices = await AmazonPolly.listVoices();
-//     if (typeof amazonVoices === 'string') {
-//       throw new Error(amazonVoices);
-//     }
-//     return amazonVoices.find(v => v. === voiceId) || googleVoices[0];
-//   default:
-//     throw Error('Unknown provider: ' + providerId);
-//   }
-//   if (providerId !== VoiceProviderId.google) {
-//   }
-//   const allVoices = await listVoices();
-//     if (typeof allVoices === 'string') {
-//       throw new Error(allVoices);
-//     }
-//     selectedVoice = allVoices.find(v => v.voiceId === 'google|en-US-Standard-A') || allVoices[0];
-//   }
-// }
