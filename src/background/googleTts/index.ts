@@ -32,7 +32,9 @@ export namespace GoogleTts {
       return cached;
     }
 
-    const apiKey = process.env.GOOGLE_API_KEY;
+    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+    console.log('apiKey', apiKey);
+    console.log('env', import.meta.env);
     if (!apiKey) {
       throw new Error('You need to set your Google API key first.');
     }
@@ -45,7 +47,7 @@ export namespace GoogleTts {
   }
 
   export async function synthesize({ text, voice }: { text: string, voice: VoicePreference }) {
-    const apiKey = process.env.GOOGLE_API_KEY;
+    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
     if (!apiKey) {
       return 'You need to set your Google API key first.';
     }

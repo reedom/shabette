@@ -10,12 +10,12 @@ import {
 const region = 'ap-northeast-1';
 
 function createClient(): PollyClient {
-  const accessKeyId = process.env.AWS_API_ACCESS_KEY;
+  const accessKeyId = import.meta.env.VITE_AWS_API_ACCESS_KEY;
   if (!accessKeyId) {
     throw new Error('You need to set your Amazon AWS Access Key first.');
   }
 
-  const secretAccessKey = process.env.AWS_API_SECRET;
+  const secretAccessKey = import.meta.env.VITE_AWS_API_SECRET;
   if (!secretAccessKey) {
     throw new Error('You need to set your Amazon AWS Secret first.');
   }

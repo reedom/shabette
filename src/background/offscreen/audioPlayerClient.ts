@@ -1,4 +1,5 @@
 import { fromByteArray } from 'base64-js';
+import Reason = chrome.offscreen.Reason;
 
 export async function playWaveRawData(rawDataString: string) {
   await createOffscreen();
@@ -19,7 +20,7 @@ export async function createOffscreen() {
   // @ts-ignore
   await chrome.offscreen.createDocument({
     url: chrome.runtime.getURL('audioPlayer.html'),
-    reasons: ['AUDIO_PLAYBACK'],
+    reasons: [Reason.AUDIO_PLAYBACK],
     justification: 'testing' // details for using the API
   });
 }

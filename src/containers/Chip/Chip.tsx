@@ -1,5 +1,5 @@
 import React from 'react';
-import * as styles from './Chip.css';
+import classes from './Chip.module.css';
 
 type ChipProps = {
   label: string;
@@ -10,7 +10,7 @@ export default function Chip(props: ChipProps) {
   const { label, color } = props;
   return (
     <div
-      className={props.onClick ? styles.clickableContainer : styles.container} style={{ backgroundColor: color }}
+      className={props.onClick ? classes.clickableContainer : classes.container} style={{ backgroundColor: color }}
       onClick={props.onClick}
     >
       {label}

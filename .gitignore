@@ -24,4 +24,5 @@
 secrets.*.js
 
 /.idea/
+/.env
 /.envrc

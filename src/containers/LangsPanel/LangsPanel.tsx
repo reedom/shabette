@@ -1,5 +1,5 @@
 import React from 'react';
-import * as styles from './LangsPanel.css';
+import classes from './LangsPanel.module.css';
 import { usePinnedLangs } from '../../hooks/usePinnedLangs';
 import useSWR from 'swr';
 import { listLangs } from '../../models/backgroundMessages';
@@ -24,8 +24,8 @@ export default function LangsPanel(props: Props) {
   const isLoading = isLoadingSelectedLang || langsState.isLoading || isLoadingPinnedLangs;
 
   return isLoading
-    ? <div className={styles.container}/>
-    : <div className={styles.container}>
+    ? <div className={classes.container}/>
+    : <div className={classes.container}>
       {pinnedLangs!.map(lang => (
         <Chip
           label={lang}

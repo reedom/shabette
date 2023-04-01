@@ -1,0 +1,22 @@
+.container {
+  display: block;
+  padding: 4px 8px;
+  margin: 2px 3px;
+}
+
+.item {
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 2px 3px;
+  color: #232F34FF;
+  cursor: pointer;
+}
+
+.selectedItem {
+  text-decoration: underline;
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 2px 3px;
+  color: #232F34FF;
+  cursor: pointer;
+}
