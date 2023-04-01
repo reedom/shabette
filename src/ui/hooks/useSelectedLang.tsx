@@ -1,5 +1,5 @@
 import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
-import { getSelectedLang, selectLang } from '../models/backgroundMessages';
+import { getSelectedLang, selectLang } from '../../models/backgroundMessages';
 
 type Props = PropsWithChildren;
 

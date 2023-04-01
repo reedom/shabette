@@ -8,6 +8,7 @@ type ContentMessageReturnType<T> =
 export interface ResParseForReader {
   title: string;
   content: string;
+  textContent: string;
   excerpt: string;
   byline: string;
   lang: string;

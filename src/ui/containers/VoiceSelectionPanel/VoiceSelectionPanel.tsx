@@ -7,7 +7,7 @@ import { useSelectedVoice } from '../../hooks/useSelectedVoice';
 import { usePinnedVoices } from '../../hooks/usePinnedVoices';
 import LangsPanel from '../LangsPanel';
 import SelectableList from '../SelectableList';
-import { VoiceProvider } from '../../models/voiceProviders';
+import { VoiceProvider } from '../../../models/voiceProviders';
 import SelectableVoiceList from './SelectableVoiceList';
 
 type Props = {}

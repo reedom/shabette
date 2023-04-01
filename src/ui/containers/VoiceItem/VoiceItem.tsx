@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gender, VoiceProviderId } from '../../models/voiceProviders';
+import { Gender, VoiceProviderId } from '../../../models/voiceProviders';
 import Chip from '../Chip';
 
 type Props = {

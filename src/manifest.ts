@@ -21,7 +21,7 @@ export default defineManifest({
   // options_page: "options.html",
   background: { "service_worker": "src/background/index.ts" },
   action: {
-    "default_popup": "src/pages/Popup/index.html",
+    "default_popup": "src/ui/pages/Popup/index.html",
     "default_icon": "img/icon-34.png"
   },
   icons: {
@@ -30,7 +30,7 @@ export default defineManifest({
   content_scripts: [
     {
       "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["src/pages/Content/index.js"],
+      "js": ["src/content/index.js"],
     }
   ],
   web_accessible_resources: [

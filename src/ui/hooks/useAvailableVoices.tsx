@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { listVoices } from '../models/backgroundMessages';
-import { ProviderVoice } from '../models/voiceProviders';
+import { listVoices } from '../../models/backgroundMessages';
+import { ProviderVoice } from '../../models/voiceProviders';
 import { useVoiceProviders } from './useVoiceProviders';
 
 type State = {

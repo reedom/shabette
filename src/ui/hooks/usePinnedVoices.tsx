@@ -1,6 +1,6 @@
 import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
-import { getPinnedVoices, pinVoice } from '../models/backgroundMessages';
-import { toVoiceKey, VoiceKey, VoiceProviderId } from '../models/voiceProviders';
+import { getPinnedVoices, pinVoice } from '../../models/backgroundMessages';
+import { toVoiceKey, VoiceKey, VoiceProviderId } from '../../models/voiceProviders';
 
 type Props = PropsWithChildren;
 

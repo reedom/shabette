@@ -1,7 +1,7 @@
 import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 import useSWR from 'swr'
-import { getSelectedVoiceProvider, listVoiceProviders, selectVoiceProvider } from '../models/backgroundMessages';
-import { VoiceProvider, VoiceProviderId } from '../models/voiceProviders';
+import { getSelectedVoiceProvider, listVoiceProviders, selectVoiceProvider } from '../../models/backgroundMessages';
+import { VoiceProvider, VoiceProviderId } from '../../models/voiceProviders';
 
 type Props = PropsWithChildren;
 

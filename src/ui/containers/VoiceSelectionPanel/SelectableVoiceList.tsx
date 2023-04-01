@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProviderVoice } from '../../models/voiceProviders';
+import { ProviderVoice } from '../../../models/voiceProviders';
 import VoiceItem from '../VoiceItem';
 
 type Props = {

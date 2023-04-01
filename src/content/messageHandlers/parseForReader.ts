@@ -1,4 +1,4 @@
-import { ResParseForReader } from '../../../models/contentMessages';
+import { ResParseForReader } from '../../models/contentMessages';
 import { Readability } from '@mozilla/readability';
 
 export async function parseForReader(): Promise<ResParseForReader | null> {
@@ -6,7 +6,8 @@ export async function parseForReader(): Promise<ResParseForReader | null> {
 
   return !article ? null : {
     title: article.title,
-    content: article.textContent,
+    content: article.content,
+    textContent: article.textContent,
     byline: article.byline,
     excerpt: article.excerpt,
     lang: article.lang,

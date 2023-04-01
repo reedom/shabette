@@ -2,9 +2,9 @@ import React from 'react';
 import classes from './LangsPanel.module.css';
 import { usePinnedLangs } from '../../hooks/usePinnedLangs';
 import useSWR from 'swr';
-import { listLangs } from '../../models/backgroundMessages';
 import Chip from '../Chip';
 import { useSelectedLang } from '../../hooks/useSelectedLang';
+import { listLangs } from '../../../models/backgroundMessages';
 
 type Props = {}
 
