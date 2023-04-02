@@ -1,3 +1,5 @@
+import { injectSentenceNodes } from '../../utils/text';
+
 export function startTextSelectionMode() {
   document.addEventListener('mouseover', onMouseOver);
   document.addEventListener('mouseout', onMouseOut);
@@ -32,22 +34,9 @@ function hasTextContent(node: Node) {
 
 function onMouseOver(event: MouseEvent) {
   const target = event.target as HTMLElement
-  console.log('onMouseOver', target.tagName, event);
-  return;
   const range = document.caretRangeFromPoint(event.clientX, event.clientY);
-  console.log(range);
-
-  if (!hasTextContent(target)) {
-    return;
-  }
-
-  if (target.nodeType === Node.TEXT_NODE) {
-    target.parentElement?.classList.add('hovered-text');
-    hoveredElement = target.parentElement;
-  } else {
-    target.classList.add('hovered-text');
-    hoveredElement = target;
-  }
+  if (!range || range.extractContents().textContent) return;
+  injectSentenceNodes(range.commonAncestorContainer);
 }
 
 function onMouseOut(event: MouseEvent) {
