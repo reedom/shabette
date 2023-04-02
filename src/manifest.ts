@@ -21,16 +21,17 @@ export default defineManifest({
   // options_page: "options.html",
   background: { "service_worker": "src/background/index.ts" },
   action: {
-    "default_popup": "src/ui/pages/Popup/index.html",
-    "default_icon": "img/icon-34.png"
+    default_popup: "src/ui/pages/Popup/index.html",
+    default_icon: "img/icon-34.png"
   },
   icons: {
     "128": "img/icon-128.png"
   },
   content_scripts: [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["src/content/index.js"],
+      matches: ["http://*/*", "https://*/*", "<all_urls>"],
+      js: ["src/content/index.ts"],
+      css: ["css/content.css"],
     }
   ],
   web_accessible_resources: [
