@@ -1,4 +1,4 @@
-import { injectSentenceNodes } from '../../utils/text';
+import { addSentenceHighlight, injectSentenceNodes, removeSentenceHighlight } from '../../utils/text';
 
 export function startTextSelectionMode() {
   document.addEventListener('mouseover', onMouseOver);
@@ -34,15 +34,22 @@ function hasTextContent(node: Node) {
 
 function onMouseOver(event: MouseEvent) {
   const target = event.target as HTMLElement
+  if (target.tagName === 'HTML') return;
   const range = document.caretRangeFromPoint(event.clientX, event.clientY);
-  if (!range || range.extractContents().textContent) return;
-  injectSentenceNodes(range.commonAncestorContainer);
+  if (!range) return;
+  let node = range.commonAncestorContainer;
+  if (node.nodeName === '#text') {
+    node = node.parentNode!;
+  }
+
+  // parseForReader().then(article => {
+  injectSentenceNodes({ document, node, /* lang: article?.lang */ });
+  addSentenceHighlight({ document, el: target });
 }
 
 function onMouseOut(event: MouseEvent) {
   const target = event.target as HTMLElement
-  console.log('onMouseOut', target.tagName, event);
-  hoveredElement?.classList.remove('hovered-text');
+  removeSentenceHighlight({ document, el: target });
 }
 
 function onClick(event: MouseEvent) {

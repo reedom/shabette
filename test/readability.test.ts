@@ -10,13 +10,24 @@ test('readability', async () => {
   const content = await fs.readFile(`${__dirname}/fixtures/readability1.html`, 'utf8');
   const dom = new JSDOM(content);
   const article = new Readability(dom.window.document).parse();
-  const sentences = extractSentences({ html: article!.content, lang: article!.lang });
+  const articleDom = new JSDOM(article!.content);
+
+  const sentences = extractSentences({ node: articleDom.window.document.firstChild!, lang: article!.lang });
   expect(sentences).toEqual([
     'The article title',
-    'The first sentence.',
-    'And second.',
+    'The first sentence. ',
+    "And second.\n",
+    " ",
+    " ",
+    " ",
+    " ",
     'Third comes here.',
-    'Fourth.',
+    "Fourth.\n",
+    " ",
+    " ",
+    "\n",
+    " ",
+    " ",
     'Fifth.'
   ]);
 });
